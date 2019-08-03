@@ -17,7 +17,7 @@ dishType String,
 dishImg String,
 dishReceipie String,
 dishVideo String,
-dishIngredients Arraylist<Quantity>,
+dishIngredients Item<>,
 dishServes integer,
 }
 
@@ -38,7 +38,7 @@ mealID Integer,
 mealUserId Integer,
 mealType String,
 mealSuggestion String,
-mealDishes Arraylist<Dish>,
+mealDishes Dish<>,
 mealAte Boolean,
 mealRating Integer,
 mealTimestamp Instant
@@ -51,7 +51,7 @@ entity DayMeal {
 dayMealID Integer,
 daymealuserid Integer,
 mealday String,
-daymealdetails Arraylist<meal>,
+daymealdetails Meal<>,
 daymealdate LocalDate
 }
 
@@ -60,7 +60,7 @@ weekMealID Integer,
 weekmealuserid Integer,
 weekstartdate ZonedDateTime,
 weekenddate ZonedDateTime,
-weekmealdetails Arraylist<daymeal>,
+weekmealdetails DayMeal<>,
 weekuseraction String,
 weekrating String
 
@@ -126,8 +126,8 @@ userid Integer,
 orderid Integer,
 externalordernno String,
 orderts ZonedDateTime,
-orderlist Arraylist<quantity>,
-userorder Arraylist<quantity>,
+orderlist Quantity<>,
+userorder Quantity<>,
 orderaddress String,
 ordernote String,
 ordettimeslot String,
@@ -156,59 +156,13 @@ totalamount Integer
 
 }
 
-enum Language {
-    FRENCH, ENGLISH, SPANISH
-}
 
-relationship OneToOne {
-	Country{region} to Region
-}
-
-relationship OneToOne {
-	Location{country} to Country
-}
-
-relationship OneToOne {
-	Department{location} to Location
-}
-
-relationship ManyToMany {
-	Job{task(title)} to Task{job}
-}
-
-// defining multiple OneToMany relationships with comments
-relationship OneToMany {
-	Employee{job} to Job,
-	/**
-	* A relationship
-	*/
-	Department{employee} to
-	/**
-	* Another side of the same relationship
-	*/
-	Employee
-}
-
-relationship ManyToOne {
-	Employee{manager} to Employee
-}
-
-// defining multiple oneToOne relationships
-relationship OneToOne {
-	JobHistory{job} to Job,
-	JobHistory{department} to Department,
-	JobHistory{employee} to Employee
-}
-
-// Set pagination options
-paginate JobHistory, Employee with infinite-scroll
-paginate Job with pagination
 
 // Use Data Transfert Objects (DTO)
 // dto * with mapstruct
 
 // Set service options to all except few
-service all with serviceImpl except Employee, Job
+service all with serviceImpl except Quantity
 
 // Set an angular suffix
 // angularSuffix * with mySuffix
