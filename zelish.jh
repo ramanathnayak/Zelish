@@ -1,0 +1,214 @@
+entity Item{
+
+itemID Integer,
+itemName String,
+itemType String,
+itemPerish Boolean,
+itemRefrig Boolean
+
+}
+
+
+
+entity Dish{
+dishId Integer,
+dishName String,
+dishType String,
+dishImg String,
+dishReceipie String,
+dishVideo String,
+dishIngredients Arraylist<Quantity>,
+dishServes integer,
+}
+
+entity Quantity {
+
+quantityItemId Integer,
+quantity Integer,
+quanityUnit String,
+quantityInstruction String,
+quantityVendorId String
+
+}
+
+
+entity Meal {
+
+mealID Integer,
+mealUserId Integer,
+mealType String,
+mealSuggestion String,
+mealDishes Arraylist<Dish>,
+mealAte Boolean,
+mealRating Integer,
+mealTimestamp Instant
+
+}
+
+
+entity DayMeal {
+ 
+dayMealID Integer,
+daymealuserid Integer,
+mealday String,
+daymealdetails Arraylist<meal>,
+daymealdate LocalDate
+}
+
+entity Week_Meal {
+weekMealID Integer,
+weekmealuserid Integer,
+weekstartdate ZonedDateTime,
+weekenddate ZonedDateTime,
+weekmealdetails Arraylist<daymeal>,
+weekuseraction String,
+weekrating String
+
+}
+
+
+entity User_id {
+
+userid Integer,
+username String,
+usertype String,
+userEmail  String,
+userAuth String,
+userpassword String,
+userphonenumber Integer,
+userphoneverified Boolean,
+userphonectrycd String,
+userphoto String,
+userlevel String,
+userspecialities String,
+userarea String,
+userpref String,
+userlastlogin ZonedDateTime
+
+}
+
+entity User_cook {
+userid Integer,
+cookid Integer,
+cookstartts ZonedDateTime,
+cookendts ZonedDateTime,
+cookratking Integer
+
+}
+
+entity vendor{
+vendorid Integer,
+vendorname String,
+vendorlogo String,
+vendorwebsite String,
+vendoruserid  String,
+vendorpassword String
+
+
+}
+
+
+entity Cook_Appointment{
+cookid Integer,
+userid Integer,
+date LocalDate,
+fromtime ZonedDateTime,
+toTime ZonedDateTime,
+reported Boolean,
+mealid Integer,
+mealpic String
+
+}
+
+entity order {
+
+userid Integer,
+orderid Integer,
+externalordernno String,
+orderts ZonedDateTime,
+orderlist Arraylist<quantity>,
+userorder Arraylist<quantity>,
+orderaddress String,
+ordernote String,
+ordettimeslot String,
+ordertotal Integer
+
+}
+
+
+entity document {
+
+userid Integer,
+document String,
+filetype String,
+docts ZonedDateTime,
+docverified String
+
+}
+
+entity payment {
+
+userid Integer,
+paymentid String,
+instamojoid String,
+paymentts ZonedDateTime,
+totalamount Integer
+
+}
+
+enum Language {
+    FRENCH, ENGLISH, SPANISH
+}
+
+relationship OneToOne {
+	Country{region} to Region
+}
+
+relationship OneToOne {
+	Location{country} to Country
+}
+
+relationship OneToOne {
+	Department{location} to Location
+}
+
+relationship ManyToMany {
+	Job{task(title)} to Task{job}
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Employee{job} to Job,
+	/**
+	* A relationship
+	*/
+	Department{employee} to
+	/**
+	* Another side of the same relationship
+	*/
+	Employee
+}
+
+relationship ManyToOne {
+	Employee{manager} to Employee
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	JobHistory{job} to Job,
+	JobHistory{department} to Department,
+	JobHistory{employee} to Employee
+}
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
