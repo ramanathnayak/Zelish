@@ -1,0 +1,16 @@
+version: '2'
+services:
+  zelish-mongodb:
+    image: mongo:4.0.10
+    ports:
+      - '27017:27017'
+    command: mongos --configdb zelish-mongodb-config
+  zelish-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  zelish-mongodb-config:
+    image: mongo:4.0.10
+    container_name: zelish-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
